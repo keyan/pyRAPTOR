@@ -1,1 +1,1 @@
-DB_FILENAME = 'db/gtfs_db'
+DB_FILENAME = '../db/gtfs_db'

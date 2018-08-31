@@ -1,7 +1,11 @@
 import argparse
 import sys
 
+import pygtfs
+
 from settings import DB_FILENAME
+from router import Router
+from timetable import Timetable
 
 
 def parse_cmd_line(args):
@@ -31,11 +35,12 @@ if __name__ == '__main__':
     schedule = pygtfs.Schedule(DB_FILENAME)
     timetable = Timetable(schedule)
 
-    router = Router(timetable)
+    router = Router()
 
     result = router.route(
         origin_stop_id=parsed.origin_stop_id,
         destination_stop_id=parsed.destination_stop_id,
+        timetable=timetable,
     )
 
     print(result)
