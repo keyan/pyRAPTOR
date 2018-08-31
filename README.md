@@ -1,0 +1,1 @@
+- Timezone not considered, so queries without explicit departure time assume departure time is now for local timezone, but do not convert to transit agency timezone
