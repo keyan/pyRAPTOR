@@ -2,17 +2,21 @@ Implementation of Round bAsed Public Transit Optimized Router (RAPTOR): https://
 
 ### Usage
 
-```
-python3 pyraptor/db_loader.py static/bart.gtfs.zip
+Currently hardcoded to use the BART GTFS feed stored as a sqllite db:  `db/gtfs_db`.
 
-python3 pyraptor/main.py --origin <STOP_ID> --dest <STOP_ID>
+```
+pip3 install requirements.txt
+
+FLASK_APP=pyraptor flask run
+
+curl "http://127.0.0.1:5000/route?origin_stop_id=12TH&dest_stop_id=24TH"
 ```
 
 ### Optimizations
 
+- add transfers
 - local pruning
 - cleanup db loading/settings
-- add flask server
 
 ### Known issues
 
