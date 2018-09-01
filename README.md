@@ -3,9 +3,9 @@ Implementation of Round bAsed Public Transit Optimized Router (RAPTOR): https://
 ### Usage
 
 ```
-python3 src/db_loader.py static/bart.gtfs.zip
+python3 pyraptor/db_loader.py static/bart.gtfs.zip
 
-python3 src/main.py --origin <STOP_ID> --dest <STOP_ID>
+python3 pyraptor/main.py --origin <STOP_ID> --dest <STOP_ID>
 ```
 
 ### Optimizations

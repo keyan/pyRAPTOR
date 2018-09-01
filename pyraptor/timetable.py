@@ -4,7 +4,7 @@ from typing import DefaultDict, List, Optional, Tuple
 
 import pygtfs
 
-from model import Route, Transfer
+from pyraptor.model import Route, Transfer, StopTime
 
 
 class Timetable(object):

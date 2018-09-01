@@ -3,9 +3,9 @@ import sys
 
 import pygtfs
 
-from settings import DB_FILENAME
-from router import Router
-from timetable import Timetable
+from pyraptor.settings import DB_FILENAME
+from pyraptor.router import Router
+from pyraptor.timetable import Timetable
 
 
 def parse_cmd_line(args):
@@ -29,9 +29,7 @@ def parse_cmd_line(args):
     return parser.parse_args(args)
 
 
-if __name__ == '__main__':
-    parsed = parse_cmd_line(sys.argv[1:])
-
+def main(origin_stop_id, destination_stop_id):
     schedule = pygtfs.Schedule(DB_FILENAME)
     timetable = Timetable(schedule)
 
@@ -41,6 +39,17 @@ if __name__ == '__main__':
         origin_stop_id=parsed.origin_stop_id,
         destination_stop_id=parsed.destination_stop_id,
         timetable=timetable,
+    )
+
+    return result
+
+
+if __name__ == '__main__':
+    parsed = parse_cmd_line(sys.argv[1:])
+
+    result = main(
+        origin_stop_id=parsed.origin_stop_id,
+        destination_stop_id=parsed.destination_stop_id,
     )
 
     print(result)

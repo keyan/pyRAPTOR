@@ -2,7 +2,7 @@ import sys
 
 import pygtfs
 
-from timetable import Timetable
+from pyraptor.timetable import Timetable
 
 # Supposedly bounding is not required but haven't figured out how to remove it yet
 MAX_TRIPS = 5
