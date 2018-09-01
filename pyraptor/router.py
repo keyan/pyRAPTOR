@@ -1,3 +1,4 @@
+import datetime
 import sys
 
 import pygtfs
@@ -35,21 +36,29 @@ class Router(object):
             # This can be removed with 'local pruning'
             [labels[stop_id].append(labels[stop_id][-1]) for stop_id in labels.keys()]
 
-            for route in timetable.routes.values():
-                curr_trip_id = None  # type: Optional[str]
-                best_departure = float('inf')
+            for idx, route in enumerate(timetable.routes):
+                curr_trip_idx = None  # type: Optional[int]
+                departure = float('inf')
 
-                for stop_id in route.route_stop_ids:
+                for stop_seq in range(route.num_stops):
+                    stop_id = timetable.route_stops[route.route_stop_idx + stop_seq]
+
                     # Must be modified when adding 'local pruning'
-                    if (
-                        curr_trip_id is not None and
-                        curr_trip_id[stop_id].arrival_time < labels[stop_id][k - 1]
-                    ):
-                        labels[stop_id][k] = curr_trip[stop_id].arrival_time
+                    if curr_trip_idx is not None:
+                        stop_time = timetable.stop_times[curr_trip_idx + stop_seq]
+                        assert stop_id == stop_time.stop_id
+                        labels[stop_id][k] = stop_time.arrival_time
+                        departure = stop_time.departure_time
 
-                    if labels[stop_id][k - 1] <= best_departure:
+                    # Check if there an earlier trip to this stop
+                    if labels[stop_id][k - 1] <= departure:
                         min_departure_time = labels[stop_id][k - 1]
-                        curr_trip = timetable.earliest_trip(route, stop_id, min_departure_time)
+                        curr_trip_idx = timetable.earliest_trip(route, stop_seq, min_departure_time)
+
+            # for transfer in timetable.transfers:
+            #     labels[
+
+        return labels[dest_stop_id]
 
     @staticmethod
     def _get_current_time_seconds():

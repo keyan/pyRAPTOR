@@ -5,10 +5,12 @@ class StopTime(object):
     def __init__(
         self,
         stop_id: str,
+        trip_id: str,
         arrival_time: int,
         departure_time: int,
     ) -> None:
         self.stop_id = stop_id
+        self.trip_id = trip_id
         self.arrival_time = arrival_time
         self.departure_time = departure_time
 

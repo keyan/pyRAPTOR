@@ -15,29 +15,29 @@ def parse_cmd_line(args):
         '--orgin',
         action='store',
         dest='origin_stop_id',
-        default='M06N',
+        default='12TH',
         help='TODO',
     )
     parser.add_argument(
         '--dest',
         action='store',
-        dest='destination_stop_id',
-        default='103',
+        dest='dest_stop_id',
+        default='24TH',
         help='TODO',
     )
 
     return parser.parse_args(args)
 
 
-def main(origin_stop_id, destination_stop_id):
+def main(origin_stop_id, dest_stop_id):
     schedule = pygtfs.Schedule(DB_FILENAME)
     timetable = Timetable(schedule)
 
     router = Router()
 
-    result = router.route(
-        origin_stop_id=parsed.origin_stop_id,
-        destination_stop_id=parsed.destination_stop_id,
+    result = router.find_route(
+        origin_stop_id=origin_stop_id,
+        dest_stop_id=dest_stop_id,
         timetable=timetable,
     )
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     result = main(
         origin_stop_id=parsed.origin_stop_id,
-        destination_stop_id=parsed.destination_stop_id,
+        dest_stop_id=parsed.dest_stop_id,
     )
 
     print(result)

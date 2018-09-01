@@ -27,12 +27,20 @@ class Timetable(object):
     def earliest_trip(
         self,
         route: Route,
-        stop_id: str,
+        stop_seq: int,
         min_departure_time: int
-    ) -> Optional[str]:
+    ) -> Optional[int]:
         """
         Return the earliest trip leaving from the input stop, if found.
         """
+        trip_idx = route.stop_times_idx
+        for _ in range(route.num_trips):
+            stop_time = self.stop_times[trip_idx + stop_seq]
+            if stop_time.departure_time >= min_departure_time:
+                return trip_idx
+
+            trip_idx += route.num_stops
+
         return None
 
     def _build_stop_ids(self) -> List[str]:
@@ -62,13 +70,14 @@ class Timetable(object):
             trips[stop_time.trip_id].append(
                 StopTime(
                     stop_id=stop_time.stop_id,
-                    arrival_time=stop_times.arrival_time.seconds,
-                    departure_time=stop_times.departure_time.seconds
+                    trip_id=stop_time.trip_id,
+                    arrival_time=stop_time.arrival_time.seconds,
+                    departure_time=stop_time.departure_time.seconds
                 )
             )
 
         trip_groups = defaultdict(lambda: [])  # type: DefaultDict[str, List[Tuple[str, List[StopTime]]]]
-        for trip_id, stop_times in trips.items:
+        for trip_id, stop_times in trips.items():
             stop_sequence = ''.join(
                 [stop_time.stop_id for stop_time in stop_times]
             )
@@ -85,17 +94,19 @@ class Timetable(object):
             first_stop_times = trip_group[0][1]
 
             self.routes.append(
-                gtfs_route_id=self.schedule.get_trips_by_id(first_trip_id)[0].route_id,
-                num_trips=len(trip_group),
-                num_stops=len(first_stop_times),
-                route_stop_idx=len(self.route_stops),
-                stop_times_idx=len(self.stop_times),
+                Route(
+                    gtfs_route_id=self.schedule.trips_by_id(first_trip_id)[0].route_id,
+                    num_trips=len(trip_group),
+                    num_stops=len(first_stop_times),
+                    route_stop_idx=len(self.route_stops),
+                    stop_times_idx=len(self.stop_times),
+                )
             )
 
             for stop_time in first_stop_times:
                 self.route_stops.append(stop_time.stop_id)
 
-            all_stop_times = [trip[1] for trip in trip_groups]
+            all_stop_times = [trip[1] for trip in trip_group]
             sorted_stop_times = sorted(
                 all_stop_times, key=lambda x: x[0].arrival_time
             )
