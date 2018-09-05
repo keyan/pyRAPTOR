@@ -7,7 +7,7 @@ Currently hardcoded to use the BART GTFS feed stored as a sqllite db:  `db/gtfs_
 ```
 pip3 install requirements.txt
 
-FLASK_APP=pyraptor flask run
+FLASK_DEBUG=1 FLASK_APP=pyraptor flask run
 
 curl "http://127.0.0.1:5000/route?origin_stop_id=12TH&dest_stop_id=24TH"
 ```

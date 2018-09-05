@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from typing import DefaultDict, List, Optional, Tuple
+from typing import DefaultDict, Dict, List, Optional, Tuple
 
 import pygtfs
 
@@ -16,6 +16,7 @@ class Timetable(object):
         self.logger = logging.getLogger(__name__)
         self.schedule = schedule
         self.stop_ids = self._build_stop_ids()
+        self.stops_dict = self._build_stops_dict()
 
         # For now this is only using GTFS tranfers.txt, but maybe a simple
         # walk + transit router can be made by dynamically adding footpaths
@@ -45,6 +46,9 @@ class Timetable(object):
 
     def _build_stop_ids(self) -> List[str]:
         return [s.stop_id for s in self.schedule.stops]
+
+    def _build_stops_dict(self) -> Dict[str, pygtfs.gtfs_entities.Stop]:
+        return {s.stop_id: s for s in self.schedule.stops}
 
     def _build_transfers(self) -> List[Transfer]:
         return [
