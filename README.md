@@ -4,15 +4,30 @@ Implementation of Round bAsed Public Transit Optimized Router (RAPTOR): https://
 
 Currently hardcoded to use the BART GTFS feed stored as a sqllite db:  `db/gtfs_db`.
 
-```
-pip3 install requirements.txt
+1. Install dependencies
+    ```
+    pip3 install requirements.txt
+    ```
+1. Load GTFS data into local SQLite DB
+    ```
+    python3 ./pyraptor/db_loader.py <gtfs_file.zip>
+    ```
+1. Run server
+    ```
+    FLASK_DEBUG=1 FLASK_APP=pyraptor flask run
+    ```
+1. Issue requests using GTFS specified stop ids. For BART these are the first column here: https://transitfeeds-data.s3-us-west-1.amazonaws.com/public/feeds/bart/58/20180920/original/stops.txt
+    ```
+    curl "http://127.0.0.1:5000/route?origin_stop_id=12TH&dest_stop_id=19TH" | jq .
 
-python3 ./pyraptor/db_loader.py <gtfs_file.zip>
-
-FLASK_DEBUG=1 FLASK_APP=pyraptor flask run
-
-curl "http://127.0.0.1:5000/route?origin_stop_id=12TH&dest_stop_id=24TH"
-```
+    [
+    [
+        "9:38:53 -- Embark from: 12th St. Oakland City Center",
+        "Take the Richmond - Daly City/Millbrae Subway towards Richmond",
+        "9:49:00 -- Disembark at: 19th St. Oakland"
+    ]
+    ]
+    ```
 
 ### Optimizations
 

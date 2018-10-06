@@ -72,16 +72,14 @@ class Router(object):
         for k in range(1, MAX_TRIPS):
             itinerary = []
             curr_stop = labels[dest_stop_id][k]
-            if labels[dest_stop_id][k - 0].arrival_time < curr_stop.arrival_time:
+            if labels[dest_stop_id][k - 1].arrival_time <= curr_stop.arrival_time:
                 break
 
             while (
                 curr_stop.boarded_stop_id is not None and
+                curr_stop.stop_id != origin_stop_id and
                 curr_stop.arrival_time != float('inf')
             ):
-                print(curr_stop.__dict__)
-                import ipdb; ipdb.set_trace()
-
                 disembark_time = datetime.timedelta(seconds=curr_stop.arrival_time)
                 itinerary.append((
                     f'{disembark_time} -- Disembark at: '
@@ -93,7 +91,7 @@ class Router(object):
                 route = self.schedule.routes_by_id(timetable_route.gtfs_route_id)[0]
                 gtfs_route_type = GtfsRouteType(route.route_type).name
                 itinerary.append((
-                    f'Take the "{route.route_long_name}" {gtfs_route_type} '
+                    f'Take the {route.route_long_name} {gtfs_route_type} '
                     f'towards {headsign}'
                 ))
                 curr_stop = labels[curr_stop.boarded_stop_id][k]

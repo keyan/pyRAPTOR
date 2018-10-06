@@ -17,10 +17,6 @@ class Timetable(object):
         self.schedule = schedule
         self.stop_ids = self._build_stop_ids()
         self.stops_dict = self._build_stops_dict()
-
-        # For now this is only using GTFS tranfers.txt, but maybe a simple
-        # walk + transit router can be made by dynamically adding footpaths
-        # from the query origin/destination to stops within some radius.
         self.transfers = self._build_transfers()
 
         self._build_routes()
@@ -51,6 +47,11 @@ class Timetable(object):
         return {s.stop_id: s for s in self.schedule.stops}
 
     def _build_transfers(self) -> List[Transfer]:
+        """
+        For now this is only using GTFS tranfers.txt, but maybe a simple
+        walk + transit router can be made by dynamically adding footpaths
+        from the query origin/destination to stops within some radius.
+        """
         return [
             Transfer(
                 from_stop_id=t.from_stop_id,
