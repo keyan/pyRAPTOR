@@ -61,12 +61,13 @@ class Router(object):
         labels: Dict[str, List[Label]],
     ) -> List[List[str]]:
         """
-        Given labels with parent stop_id pointers, construct an itinerary by
+        Given labels with parent stop_id pointers, construct itineraries by
         walking backwards from the disembark stop.
+
+        Returns at most MAX_TRIPS itineraries.
         """
         self._load_schedule()
 
-        # import ipdb;ipdb.set_trace()
         results = []
         for k in range(1, MAX_TRIPS):
             itinerary = []
@@ -79,21 +80,22 @@ class Router(object):
                 curr_stop.arrival_time != float('inf')
             ):
                 print(curr_stop.__dict__)
+                import ipdb; ipdb.set_trace()
 
                 disembark_time = datetime.timedelta(seconds=curr_stop.arrival_time)
-                itinerary.append(
-                    f'{disembark_time} -- Disembark at: \
-                    {router.timetable.stops_dict[curr_stop.stop_id].stop_name}'
-                )
+                itinerary.append((
+                    f'{disembark_time} -- Disembark at: '
+                    f'{router.timetable.stops_dict[curr_stop.stop_id].stop_name}'
+                ))
 
                 headsign = self.schedule.trips_by_id(curr_stop.trip_id)[0].trip_headsign
                 timetable_route = router.timetable.routes[curr_stop.route_idx]
                 route = self.schedule.routes_by_id(timetable_route.gtfs_route_id)[0]
                 gtfs_route_type = GtfsRouteType(route.route_type).name
-                itinerary.append(
-                    f'Take the "{route.route_long_name}" {gtfs_route_type} \
-                    towards {headsign}'
-                )
+                itinerary.append((
+                    f'Take the "{route.route_long_name}" {gtfs_route_type} '
+                    f'towards {headsign}'
+                ))
                 curr_stop = labels[curr_stop.boarded_stop_id][k]
 
             if curr_stop.arrival_time == float('inf'):
@@ -101,10 +103,10 @@ class Router(object):
 
             origin_stop = self.schedule.stops_by_id(curr_stop.stop_id)[0]
             embark_time = datetime.timedelta(seconds=departure_time)
-            itinerary.append(
-                f'{embark_time} -- Embark from: \
-                {router.timetable.stops_dict[curr_stop.stop_id].stop_name}'
-            )
+            itinerary.append((
+                f'{embark_time} -- Embark from: '
+                f'{router.timetable.stops_dict[curr_stop.stop_id].stop_name}'
+            ))
 
             itinerary.reverse()
             results.append(itinerary)

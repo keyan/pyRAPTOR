@@ -87,9 +87,9 @@ class Timetable(object):
             )
             trip_groups[stop_sequence].append((trip_id, stop_times))
 
-        self.stop_times = []  # type: List[StopTime]
-        self.route_stops = []  # type: List[str]
-        self.routes = []  # type: List[Route]
+        self.stop_times: List[StopTime] = []
+        self.route_stops: List[str] = []
+        self.routes: List[Route] = []
 
         for trip_group in trip_groups.values():
             # All the trip_ids should refer to the same GTFS route

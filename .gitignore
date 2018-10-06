@@ -1,6 +1,5 @@
 *.swp
 __pycache__/*
 .mypy_cache/*
-db/*
 *.swo
 .pytest_cache/
