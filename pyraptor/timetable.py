@@ -65,9 +65,9 @@ class Timetable(object):
 
         RAPTOR expects a "route" to only contain trips that all have the same
         stop sequence. This means we cannot reuse GTFS route objects, because
-        they do not obey this constraint by grouping both directions as a
-        single route AND by grouping trips with different stop sequences as
-        part of same route.
+        they do not obey this constraint because they group both directions as a
+        single route AND group trips with different stop sequences as part of
+        same route.
         """
         trips = defaultdict(lambda: [])  # type: DefaultDict[str, List[StopTime]]
         for stop_time in self.schedule.stop_times:
