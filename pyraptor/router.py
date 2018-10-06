@@ -171,14 +171,16 @@ class Router(object):
                             stop_seq,
                             min_departure_time,
                         )
+                        # if stop_id == 'SANL':
+                        #     import ipdb; ipdb.set_trace()
                         boarded_stop_id = stop_id
 
+            # import ipdb; ipdb.set_trace()
             # For each possible transfer, check if the time to arrive to the
             # transfer stop + the transfer cost is less than arriving without a
             # transfer.
-            for transfer in self.timetable.transfers:
-                # TODO - process transfers
-                pass
+            # for transfer in self.timetable.transfers:
+            #     pass
 
         return labels
 
